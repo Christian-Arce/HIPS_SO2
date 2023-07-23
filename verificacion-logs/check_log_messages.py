@@ -11,7 +11,7 @@ def random_password():
 
 def check_messages():
     
-    command = "cat /var/log/messages | grep -i 'service=smtp' | grep -i 'auth failure'" #esta seria en una version vieja de centos?
+    command = "sudo cat /var/log/messages | grep -i 'service=smtp' | grep -i 'auth failure'" #esta seria en una version vieja de centos?
     process = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     # Verificar si hubo errores en la ejecución del comando
     if process.returncode == 0:
