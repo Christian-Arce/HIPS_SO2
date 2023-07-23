@@ -2,7 +2,8 @@ import subprocess
 
 def check_tmpf():
     command = "sudo find /tmp -type f 2>/dev/null"
-    file_tmp = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    file_tmp = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) 
+    #subprocess.run() se almacena en un objeto CompletedProcess, que tiene un atributo stdout que contiene la salida del comando ejecutado. 
     files_list = file_tmp.stdout.splitlines()
 
     archivos_cuarentena = []
