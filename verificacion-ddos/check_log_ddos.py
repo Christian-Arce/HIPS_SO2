@@ -1,4 +1,21 @@
 import subprocess
+import sys
+import os
+
+# directorio actual
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# directorio hips
+parent_dir = os.path.dirname(current_dir)
+
+# directorio controlar_logs
+tools_dir = os.path.join(parent_dir, 'tools')
+sys.path.append(tools_dir)
+import send_csv_logs
+
+
+
+
 
 def block_ip(ip_address):
     try:
@@ -21,14 +38,22 @@ def check_ddos():
     
     contador_ip ={}
 
+
     #analizar linea por linea del contenido obtenido en file
     for line in file:
         ip_o = line.split()[2]
         ip_d = line.split()[4][:-1]
         if (ip_o , ip_d) in contador_ip: #se verifica cuantas veces aparece la ip_o ataca a ip_d
             contador_ip[(ip_o , ip_d)] = contador_ip[(ip_o , ip_d)] + 1
-            if contador_ip[(ip_o , ip_d)] == 7:
-                block_ip(ip_o)
         else:
             contador_ip[(ip_o , ip_d)] = 1
             print("1")
+    for ips, ocurrencia in contador_ip.items():
+        if ocurrencia == 7:
+            block_ip(ip_o)
+            send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Prevencion, ip bloqueada por ataque ddos, ip:{ip_o}")
+            send_csv_logs.write_log('alarmas', 'Alerta: Seguridad del correo electronico', 'Razon: Cola alta de emails')
+        else:
+            send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Todo correcto, no hay ataques ddos desde una ip")
+            
+

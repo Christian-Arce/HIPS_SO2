@@ -1,7 +1,7 @@
 import csv
 from datetime import datetime
 import os
-import datetime
+
 
 
 # Escribe un registro de una alerta o prevencion
@@ -26,6 +26,6 @@ def write_csv(file, file_name, message):
             writer = csv.writer(file)
             writer.writerow([date, message])
         print("Guardado exitoso en .csv")
-    except:
-        print("Error al guardar .csv")
+    except Exception as e:
+        print(f"Error al guardar .csv {e}")
 
