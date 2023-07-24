@@ -9,7 +9,7 @@ def block_ip(ip_address):
 
 def check_ddos():
     
-    command = "cat /var/log/dns-tcpdump/ataque" 
+    command = "sudo cat /var/log/dns-tcpdump/ataque" 
     process = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     # Verificar si hubo errores en la ejecución del comando
     if process.returncode == 0:

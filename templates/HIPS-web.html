@@ -4,64 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HIPS</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            background-color: #f2f5fa;
-        }
-        h1 {
-            margin-bottom: 20px;
-            color: #005a9e;
-        }
-        .fila {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .cuadro {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin: 10px;
-            width: 30%; /* Ajustar el ancho del cuadro exterior */
-            background-color: #fff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .cuadro h2 {
-            margin-top: 0;
-            color: #005a9e;
-        }
-        .cuadro button {
-            margin-top: 10px;
-            background-color: #005a9e;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .cuadro button:hover {
-            background-color: #003d80;
-        }
-        /* Estilos para el cuadro de texto como cuadro de información */
-        textarea {
-            resize: none;
-            width: 70%;
-            height: 120px;
-            padding: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 14px;
-            line-height: 1.6;
-            background-color: #cfe7fc; /* Color de fondo azul claro */
-            cursor: text; /* Cambiar el cursor a texto */
-            pointer-events: none; /* Deshabilitar eventos de ratón */
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>HIPS</h1>
@@ -70,19 +13,19 @@
             <h2>Archivos Binarios</h2>
             <textarea rows="4" wrap="soft">Verificar si los archivos binarios /etc/passwd y /etc/shadow han sido modificados.</textarea>
             <br>
-            <button>Verificar</button>
+            <a href="/verificacion-firma/verify_binaries">Verificar</a>
         </div>
         <div class="cuadro">
             <h2>Usuarios conectados</h2>
             <textarea rows="4" wrap="soft">Verificar los usuarios conectados al sistema y sus origenes.</textarea>
             <br>
-            <button>Verificar</button>
+            <a>Verificar</a>
         </div>
         <div class="cuadro">
             <h2>Sniffers</h2>
             <textarea rows="4" wrap="soft">Verificar posibles sniffers en el sistema.</textarea>
             <br>
-            <button>Verificar</button>
+            <a>Verificar</a>
         </div>
     </div>
     <div class="fila">
@@ -90,19 +33,19 @@
             <h2>Archivos Logs</h2>
             <textarea rows="4" wrap="soft">Verificar los archivos logs del sistema.</textarea>
             <br>
-            <button>Verificar</button>
+            <a>Verificar</a>
         </div>
         <div class="cuadro">
             <h2>Cola de Email</h2>
             <textarea rows="4" wrap="soft">Verificar el tamano de la cola del email.</textarea>
             <br>
-            <button>Verificar</button>
+            <a>Verificar</a>
         </div>
         <div class="cuadro">
             <h2>Rendimiento del Sistema</h2>
             <textarea rows="4" wrap="soft">Verificar el rendimiento del sistema y matar procesos que consuman muchos recursos.</textarea>
             <br>
-            <button>Verificar</button>
+            <a>Verificar</a>
         </div>
     </div>
     <div class="fila">
@@ -110,19 +53,25 @@
             <h2>/tmp</h2>
             <textarea rows="4" wrap="soft">Verificar la existencia de ejecutables en el directorio /tmp, si existe, se manda el archivo a cuarentena.</textarea>
             <br>
-            <button>Verificar</button>
+            <a>Verificar</a>
         </div>
         <div class="cuadro">
             <h2>DDOS</h2>
             <textarea rows="4" wrap="soft">Verificar ataques ddos y controlarlos.</textarea>
             <br>
-            <button>Verificar</button>
+            <a>Verificar</a>
         </div>
         <div class="cuadro">
             <h2>Cron</h2>
             <textarea rows="4" wrap="soft">Verificar archivos ejecutandose como cron.</textarea>
             <br>
-            <button>Verificar</button>
+            <a>Verificar</a>
+        </div>
+        <div class="cuadro">
+            <h2>Acceso Remoto</h2>
+            <textarea rows="4" wrap="soft">Verificar intentos de accesos por ssh.</textarea>
+            <br>
+            <a>Verificar</a>
         </div>
     </div>
 </body>

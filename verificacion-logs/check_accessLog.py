@@ -1,5 +1,8 @@
 
 import subprocess
+import check_log_secure
+import check_log_messages
+import check_maillog
 
 def block_ip(ip_address):
     try:
@@ -32,3 +35,11 @@ def access_log():
         else:
             contador_ip[ip] = 1
             print("1")
+
+if __name__== "__main__":
+    access_log()
+    check_log_secure.check_secure()
+    check_maillog.check_maillogg()
+    check_log_messages.check_messages()
+
+
