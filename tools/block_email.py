@@ -1,6 +1,6 @@
 import subprocess
 
-def block_email(email):
+def block_emailf(email):
     try:
         # Agregamos el email a la lista negra
         with open("/etc/postfix/sender_access", "a") as blacklist_file:

@@ -12,7 +12,7 @@ parent_dir = os.path.dirname(current_dir)
 tools_dir = os.path.join(parent_dir, 'tools')
 sys.path.append(tools_dir)
 import send_csv_logs
-
+import block_ip
 
 
 
@@ -33,27 +33,29 @@ def check_ddos():
     # Dividir la salida en líneas y eliminar el último elemento (línea vacía)
         file = process.stdout.split("\n")[:-1]
     else:
-    # Si hubo un error, imprimir el mensaje de error
-        print("Error al ejecutar el comando:")
+        send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Todo correcto, no hay ataques ddos desde una ip")
     
     contador_ip ={}
 
 
     #analizar linea por linea del contenido obtenido en file
-    for line in file:
-        ip_o = line.split()[2]
-        ip_d = line.split()[4][:-1]
-        if (ip_o , ip_d) in contador_ip: #se verifica cuantas veces aparece la ip_o ataca a ip_d
-            contador_ip[(ip_o , ip_d)] = contador_ip[(ip_o , ip_d)] + 1
-        else:
-            contador_ip[(ip_o , ip_d)] = 1
-            print("1")
-    for ips, ocurrencia in contador_ip.items():
-        if ocurrencia == 7:
-            block_ip(ip_o)
-            send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Prevencion, ip bloqueada por ataque ddos, ip:{ip_o}")
-            send_csv_logs.write_log('alarmas', 'Alerta: Seguridad del correo electronico', 'Razon: Cola alta de emails')
-        else:
-            send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Todo correcto, no hay ataques ddos desde una ip")
-            
+    if process.returncode == 0:
+        for line in file:
+            ip_o = line.split()[2]
+            ip_d = line.split()[4][:-1]
+            if (ip_o , ip_d) in contador_ip: #se verifica cuantas veces aparece la ip_o ataca a ip_d
+                contador_ip[(ip_o , ip_d)] = contador_ip[(ip_o , ip_d)] + 1
+            else:
+                contador_ip[(ip_o , ip_d)] = 1
 
+        for (ip_o,ip_d), ocurrencia in contador_ip.items():
+            if ocurrencia == 5:
+                print(ocurrencia)
+                #block_ip.block(ip_o)
+                send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Prevencion, ip bloqueada por ataque ddos, ip:{ip_o}")
+                send_csv_logs.write_log('prevencion', 'Prevencion: bloquear', 'Razon: Cola alta de emails',f'ip bloqueada por ataque ddos, ip:{ip_o}' )
+            else:
+                #print(ips, ocurrencia)
+                send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Todo correcto, no hay suficientes ataques ddos desde una ip")
+            
+check_ddos()

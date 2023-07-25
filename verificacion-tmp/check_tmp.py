@@ -35,7 +35,7 @@ def check_tmpf():
             subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         except:
             print(f"No se pudo mover a cuarentena el archivo: {archivo}.")
-
+check_tmpf()
 
 
 
