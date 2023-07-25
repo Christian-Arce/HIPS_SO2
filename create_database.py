@@ -1,30 +1,33 @@
 import psycopg2
 import subprocess
+import os
 PASSWD_DIR = "/etc/passwd"
 SHADOW_DIR = "/etc/shadow"
 
+from dotenv import load_dotenv
+load_dotenv()
 
-
-
-def create_database():
+def con_db():
     # Conexión a la base de datos PostgreSQL
     try:
         conn = psycopg2.connect(
-            host="localhost",
-            port="5432",
-            dbname="hips",
-            user="hips",
-            password="12345"
+            host='localhost',
+            dbname='hips',
+            user=os.getenv('bd_user'),
+            password=os.getenv('bd_password')
         )
         print("Conexión a la base de datos exitosa.")
+        return conn  # Return the connection if it's successful
     except Exception as e:
         print("Error al conectarse a la base de datos:", e)
-        return
+        return None  # Return None if there's an error in connecting
 
+def create_database():
+    conn=con_db()
+    cursor=conn.cursor()
     # Crear la tabla 'file_hashes' en la base de datos si no existe y los hashes para /etc/passwd y shadow iniciales
     hash_passwd_init = subprocess.run(["sudo", "sha256sum", PASSWD_DIR], check=True, capture_output=True).stdout.decode().strip().split()[0]
     hash_shadow_init = subprocess.run(["sudo", "sha256sum", SHADOW_DIR], check=True, capture_output=True).stdout.decode().strip().split()[0] 
-    cursor=conn.cursor()
     cursor.execute('DROP TABLE IF EXISTS file_hashes;')
     cursor.execute(
         """
@@ -56,4 +59,5 @@ def create_database():
     conn.commit()
     cursor.close()
     conn.close()
+
 create_database()
