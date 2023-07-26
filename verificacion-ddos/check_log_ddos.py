@@ -20,7 +20,7 @@ import send_email
 def block_ip(ip_address):
     try:
         subprocess.run(["sudo", "iptables", "-A", "INPUT", "-s", ip_address, "-j", "DROP"])
-        print(f"La dirección IP {ip_address} ha sido bloqueada.")
+        print(f"La dirección IP: {ip_address} ha sido bloqueada.")
     except:
         print("Error al bloquear la dirección IP.")
 
