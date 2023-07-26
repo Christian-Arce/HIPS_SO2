@@ -13,7 +13,7 @@ tools_dir = os.path.join(parent_dir, 'tools')
 sys.path.append(tools_dir)
 import send_csv_logs
 import block_ip
-
+import send_email
 
 
 
@@ -28,18 +28,14 @@ def check_ddos():
     
     command = "sudo cat /var/log/dns-tcpdump/ataque" 
     process = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    # Verificar si hubo errores en la ejecución del comando
-    if process.returncode == 0:
-    # Dividir la salida en líneas y eliminar el último elemento (línea vacía)
-        file = process.stdout.split("\n")[:-1]
-    else:
-        send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Todo correcto, no hay ataques ddos desde una ip")
-    
+   
     contador_ip ={}
-
+    email =''
 
     #analizar linea por linea del contenido obtenido en file
-    if process.returncode == 0:
+    # Dividir la salida en líneas y eliminar el último elemento (línea vacía)
+    if process.stdout != '':
+        file = process.stdout.split("\n")[:-1]
         for line in file:
             ip_o = line.split()[2]
             ip_d = line.split()[4][:-1]
@@ -51,11 +47,20 @@ def check_ddos():
         for (ip_o,ip_d), ocurrencia in contador_ip.items():
             if ocurrencia == 5:
                 print(ocurrencia)
-                #block_ip.block(ip_o)
+                block_ip.block(ip_o)
                 send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Prevencion, ip bloqueada por ataque ddos, ip:{ip_o}")
                 send_csv_logs.write_log('prevencion', 'Prevencion: bloquear', 'Razon: Cola alta de emails',f'ip bloqueada por ataque ddos, ip:{ip_o}' )
+                email = email + f'Cola alta de emails, ip bloqueada por ataque ddos, ip:{ip_o}'
+
             else:
                 #print(ips, ocurrencia)
                 send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Todo correcto, no hay suficientes ataques ddos desde una ip")
+    if email != '':
+        send_email.send_email_admin('Prevencion:', "cola alta mails", email)
+    else:
+        send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Todo correcto, no hay ataques ddos desde una ip")
+
+        
+        
             
 check_ddos()

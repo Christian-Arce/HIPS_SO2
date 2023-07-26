@@ -1,6 +1,6 @@
 import sys
 import os
-
+import send_email
 # directorio actual
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -13,7 +13,9 @@ sys.path.append(tools_dir)
 import send_csv_logs
 
 import subprocess
+#se traen los usuarios conectados y su origen
 connected_users = subprocess.check_output("who -H | awk '{print $1, $5}'", shell=True).decode('utf-8')
 send_csv_logs.write_csv('verificacion-usuarios-conectados','check_users', f"Mensaje: Usuario conectados y origen: {connected_users}")
-send_csv_logs.write_log('alarma', f'Alarama: Usuarios conectados y origen{connected_users}', f'Razon: Checkeo')
+send_csv_logs.write_log('alarma', f'Alarma: Usuarios conectados y origen{connected_users}', f'Razon: Checkeo')
+send_email.send_email_admin('Aviso:', "usuarios conectados", f"Mensaje: Usuario conectados y origen: {connected_users}")
 print(connected_users)

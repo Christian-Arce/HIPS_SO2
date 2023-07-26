@@ -17,10 +17,10 @@ def con_db():
             password=os.getenv('bd_password')
         )
         print("Conexión a la base de datos exitosa.")
-        return conn  # Return the connection if it's successful
+        return conn  # Retorna la conexion si es exitosa
     except Exception as e:
         print("Error al conectarse a la base de datos:", e)
-        return None  # Return None if there's an error in connecting
+        return None  # Retorna nada si hay error
 
 def create_database():
     conn=con_db()

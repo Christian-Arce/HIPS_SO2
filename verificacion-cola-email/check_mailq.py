@@ -12,6 +12,8 @@ parent_dir = os.path.dirname(current_dir)
 tools_dir = os.path.join(parent_dir, 'tools')
 sys.path.append(tools_dir)
 import send_csv_logs
+import send_email
+
 def get_mail_queue_size():
     try:
         output = subprocess.check_output("mailq | tail -n 1", shell=True).decode('utf-8')
@@ -32,6 +34,7 @@ if __name__ == "__main__":
         print(f"¡Hay más de 50 mensajes en cola! ({queue_size} mensajes)")
         send_csv_logs.write_csv('verificacion-cola-email','check_mailq', f"Mensaje: Alerta, hay una gran cola de email, tamano:{queue_size}")
         send_csv_logs.write_log('alarmas', 'Alerta: Seguridad del correo electronico', 'Razon: Cola alta de emails')
+        send_email.send_email_admin('Alarma:', "Correo", f"La cola de emails es muy grande, tamano de {queue_size}")
 
 
     else:

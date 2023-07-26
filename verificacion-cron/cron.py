@@ -14,10 +14,11 @@ parent_dir = os.path.dirname(current_dir)
 tools_dir = os.path.join(parent_dir, 'tools')
 sys.path.append(tools_dir)
 import send_csv_logs
+import send_email
 
 def listar_tareas_cron():
     usuarios = pwd.getpwall() #trae todo el contenido de /etc/passwd
-
+    email = ''
     print("Tareas cron de todos los usuarios:\n")
     #print(usuarios)
     for usuario in usuarios:
@@ -33,11 +34,14 @@ def listar_tareas_cron():
         cron = CronTab(user=usuario_actual)
         send_csv_logs.write_csv('verificacion-cron','cron', f"Mensaje: Usuario: {usuario_actual} tiene un archivo en /var/spool/cron/{usuario_actual}")
         send_csv_logs.write_log('alarmas', f'Alerta: Usuario: {usuario_actual} tiene un archivo en /var/spool/cron/{usuario_actual} ', 'Razon: archivo cron ejecutandose')
-
+        email = email + f"Usuario: {usuario_actual} tiene un archivo en /var/spool/cron/{usuario_actual}"
         print(f"Usuario: {usuario_actual}")
         for tarea in cron:
             print(f"Comando: {tarea.command}")
             print(f"Frecuencia: {tarea.frequency_per_hour()} veces por hora.")
             print()
+    if email != '':
+        send_email.send_email_admin('Alerta:', "cron encontrado", email)
+        
 
 listar_tareas_cron()
