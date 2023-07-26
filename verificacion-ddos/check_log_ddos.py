@@ -49,7 +49,7 @@ def check_ddos():
                 print(ocurrencia)
                 block_ip.block(ip_o)
                 send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Prevencion, ip bloqueada por ataque ddos, ip:{ip_o}")
-                send_csv_logs.write_log('prevencion', 'Prevencion: bloquear', 'Razon: Cola alta de emails',f'ip bloqueada por ataque ddos, ip:{ip_o}' )
+                send_csv_logs.write_log('prevencion', 'Prevencion: bloquear', 'Razon: cola alta de emails',f'ip bloqueada por ataque ddos, ip:{ip_o}' )
                 email = email + f'Cola alta de emails, ip bloqueada por ataque ddos, ip:{ip_o}'
 
             else:
