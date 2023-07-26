@@ -16,14 +16,6 @@ import block_ip
 import send_email
 
 
-
-def block_ip(ip_address):
-    try:
-        subprocess.run(["sudo", "iptables", "-A", "INPUT", "-s", ip_address, "-j", "DROP"])
-        print(f"La dirección IP: {ip_address} ha sido bloqueada.")
-    except:
-        print("Error al bloquear la dirección IP.")
-
 def check_ddos():
     
     command = "sudo cat /var/log/dns-tcpdump/ataque" 
@@ -45,18 +37,15 @@ def check_ddos():
                 contador_ip[(ip_o , ip_d)] = 1
 
         for (ip_o,ip_d), ocurrencia in contador_ip.items():
-            if ocurrencia == 5:
+            if ocurrencia >= 5:
                 print(ocurrencia)
-                block_ip.block(ip_o)
+                block_ip.block_ipf(ip_o)
                 send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Prevencion, ip bloqueada por ataque ddos, ip:{ip_o}")
-                send_csv_logs.write_log('prevencion', 'Prevencion: bloquear', 'Razon: cola alta de emails',f'ip bloqueada por ataque ddos, ip:{ip_o}' )
-                email = email + f'Cola alta de emails, ip bloqueada por ataque ddos, ip:{ip_o}'
+                send_csv_logs.write_log('prevencion', 'Prevencion: bloquear', 'Razon: ataque dns',f'ip bloqueada por ataque ddos, ip:{ip_o}' )
+                email = email + f'ip bloqueada por ataque ddos, ip:{ip_o}\n'
 
-            else:
-                #print(ips, ocurrencia)
-                send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Todo correcto, no hay suficientes ataques ddos desde una ip")
     if email != '':
-        send_email.send_email_admin('Prevencion:', "cola alta mails", email)
+        send_email.send_email_admin('Prevencion:', "ataque ddos", email)
     else:
         send_csv_logs.write_csv('verificacion-ddos','check_log_ddos', f"Mensaje: Todo correcto, no hay ataques ddos desde una ip")
 

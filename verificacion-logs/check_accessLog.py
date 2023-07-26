@@ -54,7 +54,9 @@ def check_messages():
     process = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     # Verificar si hubo errores en la ejecución del comando
     contador_user ={}
+    email = ''
     if process.stdout != '':
+
     # Dividir la salida en líneas y eliminar el último elemento (línea vacía)
         file = process.stdout.split("\n")[:-1]
         for line in file:
@@ -62,16 +64,14 @@ def check_messages():
             user = [word for word in line.split() if 'user=' in word][0]
             # Se borran los corchetes
             user = user.split('=')[-1][:-1]
-            print(user) 
-            email = ''
             try:
                 if user in contador_user:
                     contador_user[user] = contador_user[user] + 1
                     if contador_user[user] == 30:  
                         new_passwd = new_password.random_password()
                         command_new_passwd = f"echo '{user}:{new_passwd}' | sudo chpasswd"
-                        subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                        send_csv_logs.write_csv('verificacion-logs','check_log_messages', f"Mensaje: Prevencion, varios auth failure en /etc/log/messages del usuario {user}, se procedio al cambio de contrasena")
+                        subprocess.run(command_new_passwd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                        send_csv_logs.write_csv('verificacion-logs','check_accessLog', f"Mensaje: Prevencion, varios auth failure en /etc/log/messages del usuario {user}, se procedio al cambio de contrasena")
                         send_csv_logs.write_log('prevencion', f'Prevencion: Cambio de contrasena a {user}', 'Razon: Varios auth failure')
                         email = email + f"varios auth failure en /etc/log/message del usuario {user}, se cambio la contrasena. \n"
 
@@ -101,7 +101,6 @@ def check_secure():
     if process.stdout != '':
     # Dividir la salida en líneas y eliminar el último elemento (línea vacía)
         file = process.stdout.split("\n")[:-1]
-        print(file)
         for user in file:
             user = user.split('=')[-1]
             if user in contador_user:

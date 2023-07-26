@@ -1,7 +1,6 @@
 import subprocess
 import sys
 import os
-import create_database
 
 # directorio actual
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,12 +13,15 @@ tools_dir = os.path.join(parent_dir, 'tools')
 sys.path.append(tools_dir)
 import send_csv_logs
 import send_email
+import connect_db
 # Archivos a verificar
 PASSWD_DIR = "/etc/passwd"
 SHADOW_DIR = "/etc/shadow"
 
+
+
 def compare_hashes():
-    conn=create_database.con_db()
+    conn=connect_db.con_db()
     cursor=conn.cursor()
     cursor.execute("SELECT file_hash FROM file_hashes WHERE file_path = %s;", (PASSWD_DIR,))
     hash_original_passwd = cursor.fetchone()
