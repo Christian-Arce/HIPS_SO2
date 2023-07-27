@@ -39,12 +39,12 @@ def verificar_ssh_logs():
             
             else:
                 ip_contador[ip_origen]=1
-            for ip, ocurrencia in ip_contador.items():  #se separan en (ip_origen, valor )
-                if ocurrencia >= 5:
-                    send_csv_logs.write_csv('verificacion-ssh','check_ssh_logs', f"Mensaje: Alarma, intento de conexion remota (ssh) de {ip}")
-                    send_csv_logs.write_log('prevencion', 'Prevencion: Bloqueo de ip', f'Razon: Varios intentos de acceso al sistema de {ip}')
-                    block_ip.block_ipf(ip)
-                    email = email + f'Razon: Varios intentos de acceso al sistema de {ip}'
+        for ip, ocurrencia in ip_contador.items():  #se separan en (ip_origen, valor )
+            if ocurrencia >= 5:
+                send_csv_logs.write_csv('verificacion-ssh','check_ssh_logs', f"Mensaje: Alarma, intento de conexion remota (ssh) de {ip}")
+                send_csv_logs.write_log('prevencion', 'Prevencion: Bloqueo de ip', f'Razon: Varios intentos de acceso al sistema de {ip}')
+                block_ip.block_ipf(ip)
+                email = email + f'Razon: Varios intentos de acceso al sistema de {ip}, se procedio a bloquear la ip'
     if email != '':
         send_email.send_email_admin('Prevencion:', "intento de intrusion", email)
 

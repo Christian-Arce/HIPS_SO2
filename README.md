@@ -131,7 +131,13 @@ Entra dentro del directorio y establece la contrasena que elegiste para la base 
 
     cd HIPS
     nano .env
-    bd_password='<contraseña>'
+    bd_password='contrasenha'
+    bd_user='usuario'
+    secret_key='secret_key'
+    hips_email='correo del hips'
+    hips_email_password='contrasenha del email del hips'
+    hips_email_admin='email admin'
+
     
 Guarda el archivo y cambia los permisos para que solo root pueda revisar el archivo
 
@@ -183,5 +189,9 @@ Estando como root en la carpeta HIPS
 En el navegador abre el siguiente link
    
     http://127.0.0.1:5000
+
+usuario y contrasenha por defecto
+admin , 12345
+
 
 

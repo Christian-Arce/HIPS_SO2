@@ -56,7 +56,7 @@ def compare_hashes():
         send_csv_logs.write_csv('verificacion-firma', 'verify_binaries', "/etc/shadow no ha sido modificado")
     else:
         print(f"El archivo /etc/shadow ha sido modificado.")
-        cursor.execute("UPDATE file_hashes SET file_hash = %s WHERE file_path = %s;", (hash_passwd_actual, PASSWD_DIR,))
+        cursor.execute("UPDATE file_hashes SET file_hash = %s WHERE file_path = %s;", (hash_shadow_actual, SHADOW_DIR,))
         send_csv_logs.write_csv('verificacion-firma', 'verify_binaries', "/etc/shadow ha sido modificado")
         send_csv_logs.write_log('alerta', f'Alerta: Archivos binarios', 'Razon: /etc/shadow ha sido modificado')
         email_body = email_body + "/etc/shadow ha sido modificado"
@@ -65,6 +65,6 @@ def compare_hashes():
     conn.close()
     cursor.close()
     if email_body != '':
-        send_email.send_email_admin('Alarma', "Modificacion archivos binarios", "/etc/shadow ha sido modificado")
+        send_email.send_email_admin('Alarma', "Modificacion archivos binarios", email_body)
         
 compare_hashes()

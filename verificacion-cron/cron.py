@@ -28,7 +28,7 @@ def listar_tareas_cron():
         
         if not os.path.isfile(archivo_cron):
             # Si el usuario no tiene un archivo cron, pasamos al siguiente.
-            send_csv_logs.write_csv('verificacion-cron','cron', f"Mensaje: Usuario: {usuario_actual} no tiene un archivo en /var/spool/cron/{usuario_actual}")
+            #send_csv_logs.write_csv('verificacion-cron','cron', f"Mensaje: Usuario: {usuario_actual} no tiene un archivo en /var/spool/cron/{usuario_actual}")
             continue
         
         cron = CronTab(user=usuario_actual)
@@ -42,6 +42,9 @@ def listar_tareas_cron():
             print()
     if email != '':
         send_email.send_email_admin('Alerta:', "cron encontrado", email)
+    else:
+        send_csv_logs.write_csv('verificacion-cron','cron', f"Mensaje: Todo correcto")
+
         
 
 listar_tareas_cron()

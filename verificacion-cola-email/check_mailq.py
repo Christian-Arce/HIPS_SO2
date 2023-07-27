@@ -22,7 +22,7 @@ def get_mail_queue_size():
             queue_size = 0
             return queue_size
         else:
-            queue_size = int(queue_size_line.split()[1])#separa el output para poder agarrar el numero de colas y lo pasa a int
+            queue_size = int(queue_size_line.split()[4])#separa el output para poder agarrar el numero de colas y lo pasa a int
             return queue_size
     except:
         print("Error al obtener el tamaño de la cola.")
