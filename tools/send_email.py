@@ -15,14 +15,18 @@ hips_email_password = os.getenv("hips_email_password")
 hips_email_admin = os.getenv("hips_email_admin")
 
 def send_email_admin(alert_type, subject, body):
-    smtp_server = "smtp-mail.outlook.com"
-    smtp_port = 587  # Puerto para TLS/STARTTLS
+    try:
+        smtp_server = "smtp-mail.outlook.com"
+        smtp_port = 587  # Puerto para TLS/STARTTLS
 
-    context = ssl.create_default_context()
+        context = ssl.create_default_context()
 
-    with smtplib.SMTP(smtp_server, smtp_port) as connection:
-        connection.starttls(context=context)  # Establecer conexión segura con TLS
-        connection.login(user=hips_email, password=hips_email_password)
+        with smtplib.SMTP(smtp_server, smtp_port) as connection:
+            connection.starttls(context=context)  # Establecer conexión segura con TLS
+            connection.login(user=hips_email, password=hips_email_password)
 
-        message = f"Subject: {alert_type} {subject}\n\n{body}"
-        connection.sendmail(from_addr=hips_email, to_addrs=hips_email_admin, msg=message)
+            message = f"Subject: {alert_type} {subject}\n\n{body}"
+            connection.sendmail(from_addr=hips_email, to_addrs=hips_email_admin, msg=message)
+    except Exception as e:
+        print(f"Error al mandar correo: {e}")
+

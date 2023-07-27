@@ -106,13 +106,15 @@ def check_secure():
             if user in contador_user:
                 contador_user[user] = contador_user[user] + 1
                 if contador_user[user] == 30:
-                    new_passwd = new_password.random_password()
-                    command_new_passwd = f"echo '{user}:{new_passwd}' | sudo chpasswd"
-                    subprocess.run(command_new_passwd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                    send_csv_logs.write_csv('verificacion-logs','check_accessLog', f"Mensaje: Prevencion, varios auth failure en /etc/log/secure del usuario {user}")
-                    send_csv_logs.write_log('prevencion', f'Prevencion: Cambio de contrasena a {user}', 'Razon: Varios auth failure')
-                    email = email + f"varios auth failure en /etc/log/secure del usuario {user}, se cambio la contrasena. \n"
-                    
+                    try:
+                        new_passwd = new_password.random_password()
+                        command_new_passwd = f"echo '{user}:{new_passwd}' | sudo chpasswd"
+                        subprocess.run(command_new_passwd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                        send_csv_logs.write_csv('verificacion-logs','check_accessLog', f"Mensaje: Prevencion, varios auth failure en /etc/log/secure del usuario {user}")
+                        send_csv_logs.write_log('prevencion', f'Prevencion: Cambio de contrasena a {user}', 'Razon: Varios auth failure')
+                        email = email + f"varios auth failure en /etc/log/secure del usuario {user}, se cambio la contrasena. \n"
+                    except Exception as e:
+                        print(f"Error {e}")          
             else:
                 contador_user[user] = 1
             

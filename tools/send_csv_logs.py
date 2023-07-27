@@ -19,13 +19,17 @@ import send_csv_logs
 # Formato fecha_hora :: tipo_alarma :: ip_email   motivo
 
 def write_log(alarmas_o_prevencion, tipo_alarma, reason, ip_or_email = ''):
-    date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    text = f'{date} :: {tipo_alarma} :: {ip_or_email} \t{reason}'
+    try:
+        date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        text = f'{date} :: {tipo_alarma} :: {ip_or_email} \t{reason}'
 
-    if alarmas_o_prevencion == 'alarmas' or alarmas_o_prevencion == 'prevencion':
-        os.system(f"sudo echo '{text}' >> /var/log/hips/{alarmas_o_prevencion}.log")
-    else:
-        print("Error input")
+        if alarmas_o_prevencion == 'alarmas' or alarmas_o_prevencion == 'prevencion':
+            os.system(f"sudo echo '{text}' >> /var/log/hips/{alarmas_o_prevencion}.log")
+        else:
+            print("Error input")
+    except Exception as e:
+        print(f"Error al escribir log: {e}")
+        
 
 
 
