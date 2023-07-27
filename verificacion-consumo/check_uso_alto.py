@@ -76,7 +76,7 @@ def verificar_procesos_cpu_ram():
                 send_csv_logs.write_csv('verificacion-consumo', 'check_uso_alto', f"Prevencion, el proceso: {process['PID']} consume mucha memoria")
                 send_csv_logs.write_log('alarmas', 'Alarma: Sistema saturado', f"Razon: Uso de mucha memoria de {process['PID']}") 
                 send_csv_logs.write_log('prevencion', f'Prevencion: Matar proceso {process["PID"]}', 'Razon: Uso de mucha memoria') 
-                email=f"Prevencion, el proceso: {process['PID']} consume mucha memoria, se ha eliminado" 
+                email=email + f"Prevencion, el proceso: {process['PID']} consume mucha memoria, se ha eliminado\n" 
                      
 
     for process in highest_cpu:
@@ -89,6 +89,7 @@ def verificar_procesos_cpu_ram():
                 send_csv_logs.write_log('alarmas', 'Alarma: Sistema saturado', f"Razon: Uso de mucha CPU de {process['PID']}") 
                 send_csv_logs.write_log('prevencion', f'Prevencion: Matar proceso {process["PID"]}', 'Razon: Uso de mucha CPU') 
                 kill_list.append(process)
+                email=email + f"Prevencion, el proceso: {process['PID']} consume mucha cpu, se ha eliminado\n" 
 
     # Procedemos a matar los procesos que abusaron de los recursos
     for process in kill_list:

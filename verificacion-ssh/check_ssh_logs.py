@@ -16,7 +16,8 @@ import block_ip
 import send_email
 
 def verificar_ssh_logs():
-    command = "sudo cat /var/log/secure | grep -i 'sshd' | grep -i 'Failed password'"
+    command = "sudo cat /var/log/secure.log | grep -i 'sshd' | grep -i 'Failed password'"
+    email = ''
     try:
         result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         print("hola")
@@ -39,8 +40,8 @@ def verificar_ssh_logs():
             else:
                 ip_contador[ip_origen]=1
             for ip, ocurrencia in ip_contador.items():  #se separan en (ip_origen, valor )
-                if ocurrencia >= 7:
-                    send_csv_logs.write_csv('verificacion-ssh','check_ssh_logs', f"Mensaje: Alarma, intento de conexion remota (ssh)")
+                if ocurrencia >= 5:
+                    send_csv_logs.write_csv('verificacion-ssh','check_ssh_logs', f"Mensaje: Alarma, intento de conexion remota (ssh) de {ip}")
                     send_csv_logs.write_log('prevencion', 'Prevencion: Bloqueo de ip', f'Razon: Varios intentos de acceso al sistema de {ip}')
                     block_ip.block_ipf(ip)
                     email = email + f'Razon: Varios intentos de acceso al sistema de {ip}'
