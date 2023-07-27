@@ -43,7 +43,7 @@ Instalar instalar Python3 y Pip3
     
 ##### Intalación de modulos de Python
     
-Psycopg2: necesario para trabajar con la base de datos, instalar como root
+Psycopg2
  
 
     pip3 install psycopg2
@@ -62,10 +62,9 @@ Instalar y configurar PostgreSQL
 
     sudo yum install postgresql
     sudo yum install postgresql-server
-  
-Creamos un nuevo cluster de la base de datos PostgreSQL
+Inicializamos el cluster para poder configurar los archivos y configuracion necesaria
 
-    sudo systemctl start postgresql
+	sudo postgresql-setup --initdb
 
 Iniciamos y habilitamos el servicio de postgres
 
@@ -73,7 +72,7 @@ Iniciamos y habilitamos el servicio de postgres
     sudo systemctl enable postgresql
     
     
-##### Ahora debemos configurar la Base de Datos
+##### Pasos para configurar la Base de Datos
 Iniciamos con la cuenta de postgres
 
     sudo -i -u postgres
@@ -176,6 +175,24 @@ Crear los logs
     touch mkdir /var/log/secure.log
 
     touch mkdir /var/log/maillog.log
+
+## Configurar sender_access para el bloqueo de emails
+	sudo yum install postfix
+	sudo systemctl start postfix
+	sudo systemctl enable postfix
+ Editar main.cf
+ 	
+  	sudo nano /etc/postfix/main.cf
+   	smtpd_recipient_restrictions = ..., check_sender_access hash:/etc/postfix/sender_access, ...
+Crear sender_access
+
+	mkdir /etc/postfix/sender_access
+ Dar permisos
+
+ 	sudo chown root:postfix /etc/postfix/sender_access
+	sudo chmod 644 /etc/postfix/sender_access
+
+
 ## Generar contrasenha hash para el administrador del hips
 
 Ejecutar create_database.py para crear las tablas y guardar el usuario y los hashes
