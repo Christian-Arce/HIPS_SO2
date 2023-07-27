@@ -147,16 +147,16 @@ Necesitamos crear algunos directorios donde el sistema guardara los resultados, 
 
 Estando como usuario root
       
-        mkdir /var/log/hips/output/verificacion-cola-email
-        mkdir /var/log/hips/output/verificacion-logs
-        mkdir /var/log/hips/output/verificacion-consumo    
-        mkdir /var/log/hips/output/verificacion-sniffers
-        mkdir /var/log/hips/output/verificacion-cron        
-        mkdir /var/log/hips/output/verificacion-ssh
-        mkdir /var/log/hips/output/verificacion-ddos        
-        mkdir /var/log/hips/output/verificacion-tmp
-        mkdir /var/log/hips/output/verificacion-firma       
-        mkdir /var/log/hips/output/verificacion-usuarios-conectados
+        touch mkdir /var/log/hips/output/verificacion-cola-email/check_mailq.csv
+        touch mkdir /var/log/hips/output/verificacion-logs/check_accessLog.csv
+        touch mkdir /var/log/hips/output/verificacion-consumo/check_uso_alto.csv   
+        touch mkdir /var/log/hips/output/verificacion-sniffers/check_sniffers.csv
+        touch mkdir /var/log/hips/output/verificacion-cron/cron.csv        
+        touch mkdir /var/log/hips/output/verificacion-ssh/check_ssh_logs.csv
+        touch mkdir /var/log/hips/output/verificacion-ddos/check_ddos.csv    
+        touch mkdir /var/log/hips/output/verificacion-tmp/check_tmp.csv
+        touch mkdir /var/log/hips/output/verificacion-firma/verify_binaries.csv       
+        touch mkdir /var/log/hips/output/verificacion-usuarios-conectados/check_users.csv
 
 
 Crear los logs
@@ -170,12 +170,18 @@ Crear los logs
     touch mkdir /var/log/secure.log
 
     touch mkdir /var/log/maillog.log
-    
+## Generar contrasenha hash para el administrador del hips
+
+Ejecutar create_database.py para crear las tablas y guardar el usuario y los hashes
+para /etc/passwd y /etc/shadow
     
 ## Modo de Uso
 Estando como root en la carpeta HIPS
 
      export FLASK_APP=app
      flask run
+En el navegador abre el siguiente link
+   
+    http://127.0.0.1:5000
 
 
