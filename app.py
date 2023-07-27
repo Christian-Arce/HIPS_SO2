@@ -3,20 +3,28 @@ import psycopg2
 import sys 
 import subprocess 
 sys.path.append('verificacion-binarios/')
-import create_database
 import csv
+import os
 app = Flask(__name__) 
 app.secret_key = 'secret' 
+import create_database 
+from dotenv import load_dotenv
+load_dotenv()
 
-def get_db_connection(): 
-    # Create a new database connection for each request 
-    con=psycopg2.connect( 
-        host="localhost", 
-        database="hips", 
-        user="hips", 
-        password="12345" 
-    ) 
-    return con
+def con_db():
+    # Conexión a la base de datos PostgreSQL
+    try:
+        conn = psycopg2.connect(
+            host='localhost',
+            dbname='hips',
+            user=os.getenv('bd_user'),
+            password=os.getenv('bd_password')
+        )
+        print("Conexión a la base de datos exitosa.")
+        return conn  # Retorna la conexion si es exitosa
+    except Exception as e:
+        print("Error al conectarse a la base de datos:", e)
+        return None  # Retorna nada si hay error
 
 @app.route('/login', methods=['GET', 'POST']) 
 def login(): 
@@ -25,7 +33,7 @@ def login():
         password = request.form['password'] 
 
         # Get the database connection from the session 
-        conn = get_db_connection() 
+        conn = con_db() 
         cur = conn.cursor() 
 
         # Query the database for the user 
