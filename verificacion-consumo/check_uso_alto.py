@@ -66,7 +66,7 @@ def verificar_procesos_cpu_ram():
     email = ''
     for process in highest_mem:
         # Si se usa más del 80% de la memoria RAM
-        if process["%MEM"] > 18.0:    
+        if process["%MEM"] > 80.0:    
             process["motivo"] = "usa mucha memoria"
     
             if(process["Tiempo de Ejecucion"]) > 1:
@@ -79,7 +79,7 @@ def verificar_procesos_cpu_ram():
 
     for process in highest_cpu:
         # Si se usa más del 80% del CPU
-        if process["%CPU"] > 50.0:
+        if process["%CPU"] > 80.0:
             process["motivo"] = "usa mucha CPU"
             print(process["Tiempo de Ejecucion"])
             if (process["Tiempo de Ejecucion"]) > 1:
