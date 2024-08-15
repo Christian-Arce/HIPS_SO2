@@ -59,9 +59,7 @@ def get_highest_process(mem_or_cpu):
 
     return process_list
 
-# ... Resto del código ...
 def verificar_procesos_cpu_ram():
-    print("hola")
     highest_mem = get_highest_process("mem")
     highest_cpu = get_highest_process("cpu")
     kill_list = []
